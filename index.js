@@ -1,5 +1,6 @@
 const express = require("express");
 const handlebars = require("express-handlebars");
+const path = require("path");
 const app = express();
 
 // Handlebars config
@@ -11,6 +12,7 @@ const usersRouter = require("./routes/usersRouter");
 const productsRouter = require("./routes/productsRouter");
 
 // Middlewares
+app.use(express.static(path.join(__dirname, "/public")));
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 app.use(express.urlencoded({ extended: true }));
