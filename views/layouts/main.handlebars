@@ -7,6 +7,32 @@
     <title>Le Bon Plan</title>
   </head>
   <body>
+    {{#if isLoggedIn}}
+      <nav>
+        <h2>LeBonPlan</h2>
+        <div class="navBtn">
+          <a href="/">Home</a>
+          <a href="">Cities</a>
+        </div>
+        <div class="navBtn">
+          <a href="/profile">Profile</a>
+          <a href="/logout">Logout</a>
+        </div>
+      </nav>
+    {{else}}
+      <nav>
+        <h2>LeBonPlan</h2>
+        <div class="navBtn">
+          <a href="/">Home</a>
+          <a href="">Cities</a>
+        </div>
+        <div class="navBtn">
+          <a href="/signup">Signup</a>
+          <a href="/login">Login</a>
+        </div>
+      </nav>
+    {{/if}}
+
     {{{body}}}
   </body>
 </html>
