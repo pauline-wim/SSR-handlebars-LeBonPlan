@@ -5,7 +5,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-// const cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 const app = express();
 dotenv.config({
   path: "./config.env",
@@ -32,29 +32,35 @@ mongoose
   .then(() => console.log("Connected to mongoDB"));
 
 // Middlewares
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "/public")));
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 app.use(express.urlencoded({ extended: true }));
-const auth = (req, res, next) => {
+const auth = (req, _res, next) => {
   let data;
-  try {
-    data = jwt.verify(req.cookies.jwt, secret);
-    req.userId = data.id;
-    console.log("User authentified: Request granted!");
-  } catch (err) {
-    return res.status(401).json({
-      message: "Your token is not valid",
-    });
+  if (!req.cookies) {
+    console.log("if ok");
+    req.isLoggedIn = false;
+  } else {
+    console.log("if ko");
+    try {
+      data = jwt.decode(req.cookies.jwt);
+      req.userId = data.id;
+      req.isLoggedIn = true;
+      console.log("User authentified: Request granted!");
+    } catch (err) {
+      req.isLoggedIn = false;
+    }
   }
   next();
 };
 
 // ROUTES
 // Home
-app.get("/", (req, res) => {
+app.get("/", auth, (req, res) => {
   res.render("homepage", {
-    isLoggedIn: false,
+    isLoggedIn: req.isLoggedIn,
   });
 });
 // Signup
@@ -89,6 +95,31 @@ app.post("/signup", async (req, res) => {
 // Login
 app.get("/login", (req, res) => {
   res.render("login");
+});
+// Login to personal account
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username });
+  if (!user) {
+    return res.status(400).json({
+      message: "Invalid username or password",
+    });
+  }
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    return res.status(400).json({
+      message: "Invalid username or password",
+    });
+  }
+  const token = jwt.sign({ id: user._id }, secret);
+  res
+    .cookie("jwt", token, { httpOnly: true, secure: false })
+    .redirect("/profile");
+  console.log(`${username} user successfully CONNECTED`);
+});
+//
+app.get("/profile", auth, (req, res) => {
+  res.render("profile", { isLoggedIn: req.isLoggedIn });
 });
 
 // Start server
