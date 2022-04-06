@@ -52,6 +52,10 @@ input {
   margin-bottom: 10px;
 }
 
+input:hover {
+  border: 1px solid black;
+}
+
 .submitBtn {
   background-color: orangered;
   color: antiquewhite;
@@ -60,6 +64,17 @@ input {
   border-style: none;
   align-self: center;
   width: 100px;
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 10px 0;
+}
+
+.submitBtn:hover {
+  border: none;
+  cursor: pointer;
+  background-color: rgb(252, 89, 30);
+  transform: scale(1.05);
+}
+
+.submitBtn:active {
+  background-color: rgb(221, 64, 7);
 }
