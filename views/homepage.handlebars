@@ -9,11 +9,23 @@
     <a href="/login">Login</a>
   </div>
 </nav>
-<main>
-  <h1>Le Bon Plan</h1>
-  <div>
-    <p>Paris</p>
-    <p>Lyon</p>
-    <p>Marseille</p>
-  </div>
-</main>
+{{#if isLoggedIn}}
+  <main>
+    <h1>Le Bon Plan</h1>
+    <div>
+      <p>Paris</p>
+      <p>Lyon</p>
+      <p>Marseille</p>
+    </div>
+  </main>
+{{else}}
+  <main>
+    <h1>Le Bon Plan</h1>
+    <h3>Welcome back !</h3>
+    <div>
+      <p>Paris</p>
+      <p>Lyon</p>
+      <p>Marseille</p>
+    </div>
+  </main>
+{{/if}}
