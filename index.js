@@ -13,6 +13,18 @@ const productsRouter = require("./routes/productsRouter");
 // Middlewares
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.get("/", (req, res) => {
+  res.render("homepage");
+});
+app.get("/signup", (req, res) => {
+  res.render("signup");
+});
+app.get("/login", (req, res) => {
+  res.render("login");
+});
 
 // Start server
 app.listen(8000, () => console.log("Listening"));
