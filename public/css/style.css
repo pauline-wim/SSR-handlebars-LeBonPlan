@@ -45,6 +45,10 @@ form {
   width: 600px;
 }
 
+label {
+  padding: 0 5px;
+}
+
 input {
   border: 1px solid lightgrey;
   border-radius: 5px;
